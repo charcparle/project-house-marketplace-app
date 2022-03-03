@@ -6,10 +6,10 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathMatchRoute = (route) => {
-      console.log(route)
-      console.log(location.pathname)
+      // console.log(route)
+      // console.log(location.pathname)
     if (route === location.pathname) {
-        console.log("bingo!")
+        // console.log("bingo!")
       return true;
     } else return false;
   };
