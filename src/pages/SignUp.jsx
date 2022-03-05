@@ -7,7 +7,9 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
+import { toast } from "react-toastify";
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,8 +35,16 @@ function SignUp() {
       updateProfile(auth.currentUser, {
         displayName: name,
       });
+      
+      // add new doc to firestore
+      const formDataCopy = {...formData}
+      delete formDataCopy.password
+      formDataCopy.timestamp = serverTimestamp()
+      await setDoc(doc(db, 'users', user.uid),formDataCopy)
+      
       navigate("/");
     } catch (error) {
+      toast.error("Something went wrong with your input")
       console.log(error);
     }
   };
