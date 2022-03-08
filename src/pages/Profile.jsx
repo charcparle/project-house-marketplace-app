@@ -1,26 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {db} from "../firebase.config"
+import {toast} from "react-toastify"
 import { getAuth, updateProfile } from "firebase/auth";
 import { updateDoc, doc } from "firebase/firestore";
-import {toast} from "react-toastify"
+import {db} from "../firebase.config"
+
 
 function Profile() {
   const auth = getAuth();
-  const [user, setUser] = useState({});
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });
   const {name, email} = formData
-  const [changeDetails, setChangeDetails] = useState(false)
+  const [changeDetails, setChangeDetails] = useState(false) // indicate whether user has entered the editing mode
   const navigate = useNavigate();
   const handleLogout = () => {
     auth.signOut();
     navigate("/");
   };
   const handleSubmit = async () => {
-    console.log("inside submit fn")
     try {
       if(auth.currentUser.displayName !== name) {
         // Update display name in db (auth)
@@ -39,7 +38,7 @@ function Profile() {
     }
   }
   const handleChange = (e) => {
-    console.log(e.target)
+    // console.log(e.target)
     setFormData((prevState)=>({
       ...prevState,
       [e.target.id]: e.target.value,

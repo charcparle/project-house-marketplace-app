@@ -78,6 +78,7 @@ function SignUp() {
               placeholder="Password"
               id="password"
               value={password}
+              autoComplete="new-password"
               onChange={handleChange}
             />
             <img

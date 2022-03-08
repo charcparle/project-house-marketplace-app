@@ -4,7 +4,8 @@ import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRig
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
-  import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import OAuth from "../components/OAuth";
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ function SignIn() {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(
@@ -25,14 +26,14 @@ function SignIn() {
         email,
         password
       );
-      console.log(userCredential)
+      console.log(userCredential);
       if (userCredential.user) {
         navigate("/");
-        console.log("Sign in successful")
+        console.log("Sign in successful");
       }
     } catch (error) {
-      toast.error("Invalid user credentials")
-      console.log(error)
+      toast.error("Invalid user credentials");
+      console.log(error);
     }
   };
   return (
@@ -48,6 +49,7 @@ function SignIn() {
             placeholder="Email"
             id="email"
             value={email}
+            autoComplete="username"
             onChange={handleChange}
           />
           <div className="passwordInputDiv">
@@ -57,6 +59,7 @@ function SignIn() {
               placeholder="Password"
               id="password"
               value={password}
+              autoComplete="current-password"
               onChange={handleChange}
             />
             <img
@@ -76,7 +79,7 @@ function SignIn() {
             </button>
           </div>
         </form>
-        {/* Google OAuth */}
+        <OAuth />
         <Link to="/sign-up" className="registerLink">
           Sign Up Instead
         </Link>
