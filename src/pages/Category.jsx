@@ -46,7 +46,7 @@ function Category() {
         console.log(listingsArr);
         setListings(listingsArr);
         setLoading(false);
-        console.log(listings)
+        // console.log(listings);
       } catch (error) {
         toast.error("Could not fetch listings");
         console.log(error);
@@ -65,11 +65,18 @@ function Category() {
       </header>
       {loading ? (
         <Spinner />
-      ) : ((listings && listings.length > 0) ? (
-        listings.map((listing)=>(<ListingItem listing={listing.data} id={listing.id} key={listing.id}/>))
+      ) : listings && listings.length > 0 ? (
+        listings.map((listing) => (
+          <ListingItem
+            listing={listing.data}
+            id={listing.id}
+            key={listing.id}
+            // onDelete={onDelete}
+          />
+        ))
       ) : (
         <p>No listings for {params.categoryName}</p>
-      ))}
+      )}
     </div>
   );
 }

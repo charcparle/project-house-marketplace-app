@@ -1,0 +1,48 @@
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
+
+function CreateListing() {
+  const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    type: "rent",
+    name: "",
+    bedrooms: 1,
+    bathrooms: 1,
+    parking: false,
+    furnished: false,
+    address: "",
+    offer: false,
+    regularPrice: 0,
+    discountedPrice: 0,
+    images: {},
+    latitude: 0,
+    longitude: 0,
+  });
+  const auth = getAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setFormData({ ...formData, userRef: user.uid });
+        console.log("user exists")
+        setLoading(false);
+      } else {
+        navigate("/sign-in");
+      }
+      console.log("Inside useEffect")
+    });
+    return unsub;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+  console.log(`loading: ${loading}`);
+  if (loading) {
+    return <Spinner />;
+  }
+  return <div>Create Listing</div>;
+}
+
+export default CreateListing;
