@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 import { getAuth, updateProfile } from "firebase/auth";
 import { updateDoc, doc } from "firebase/firestore";
-import {db} from "../firebase.config"
-import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg'
-import homeIcon from '../assets/svg/homeIcon.svg'
-
+import { db } from "../firebase.config";
+import arrowRight from "../assets/svg/keyboardArrowRightIcon.svg";
+import homeIcon from "../assets/svg/homeIcon.svg";
 
 function Profile() {
   const auth = getAuth();
@@ -14,8 +13,8 @@ function Profile() {
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });
-  const {name, email} = formData
-  const [changeDetails, setChangeDetails] = useState(false) // indicate whether user has entered the editing mode
+  const { name, email } = formData;
+  const [changeDetails, setChangeDetails] = useState(false); // indicate whether user has entered the editing mode
   const navigate = useNavigate();
   const handleLogout = () => {
     auth.signOut();
@@ -23,29 +22,29 @@ function Profile() {
   };
   const handleSubmit = async () => {
     try {
-      if(auth.currentUser.displayName !== name) {
+      if (auth.currentUser.displayName !== name) {
         // Update display name in db (auth)
-        await updateProfile(auth.currentUser,{
-          displayName: name
-        })
+        await updateProfile(auth.currentUser, {
+          displayName: name,
+        });
         // Update firestore
-        const userRef = doc(db, "users", auth.currentUser.uid)
+        const userRef = doc(db, "users", auth.currentUser.uid);
         await updateDoc(userRef, {
           name,
-        })
+        });
       }
     } catch (error) {
-      toast.error("Could not update profile")
-      console.log(error)
+      toast.error("Could not update profile");
+      console.log(error);
     }
-  }
+  };
   const handleChange = (e) => {
     // console.log(e.target)
-    setFormData((prevState)=>({
+    setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div className="profile">
@@ -58,36 +57,40 @@ function Profile() {
       <main>
         <div className="profileDetailsHeader">
           <p className="profileDetailsText">Personal Details</p>
-          <p className="changePersonalDetails" onClick={()=>{
-            changeDetails && handleSubmit()
-            setChangeDetails((prev)=>(!prev))}}>
+          <p
+            className="changePersonalDetails"
+            onClick={() => {
+              changeDetails && handleSubmit();
+              setChangeDetails((prev) => !prev);
+            }}
+          >
             {changeDetails ? "done" : "change"}
           </p>
         </div>
-        <div className='profileCard'>
+        <div className="profileCard">
           <form>
             <input
-              type='text'
-              id='name'
-              className={!changeDetails ? 'profileName' : 'profileNameActive'}
+              type="text"
+              id="name"
+              className={!changeDetails ? "profileName" : "profileNameActive"}
               disabled={!changeDetails}
               value={name}
               onChange={handleChange}
             />
             <input
-              type='text'
-              id='email'
-              className={!changeDetails ? 'profileEmail' : 'profileEmailActive'}
+              type="text"
+              id="email"
+              className={!changeDetails ? "profileEmail" : "profileEmailActive"}
               disabled={!changeDetails}
               value={email}
               onChange={handleChange}
             />
           </form>
         </div>
-        <Link to='/create-listing' className="createListing">
+        <Link to="/create-listing" className="createListing">
           <img src={homeIcon} alt="home" />
           <p>Sell or Rent a home</p>
-          <img src={arrowRight} alt='arrow right' />
+          <img src={arrowRight} alt="arrow right" />
         </Link>
       </main>
     </div>
