@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 // import { Helmet } from 'react-helmet'
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-// import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
-// import { Swiper, SwiperSlide } from 'swiper/react'
-// import 'swiper/swiper-bundle.css'
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
@@ -38,7 +41,29 @@ function Listing() {
   }
   return (
     <main>
-      {/* SLIDER */}
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        navigation
+        slidesPerView={1}
+        scrollbar={{ draggable: true }}
+      >
+        {listing.imgUrls.map((url, index) => (
+          <SwiperSlide key={index}>
+            <div key={index + "div"} className="swiper-container">
+              <div
+                style={{
+                  backgroundImage: `url(${url})`,
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                className="swiperSlideDiv"
+              ></div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
       <div
         className="shareIconDiv"
         onClick={() => {
@@ -93,7 +118,7 @@ function Listing() {
         <p className="listingLocationTitle">Location</p>
         <div className="leafletContainer">
           <MapContainer
-            style={{ height: '100%', width: '100%' }}
+            style={{ height: "100%", width: "100%" }}
             center={[listing.geolocation.lat, listing.geolocation.lng]}
             zoom={13}
             scrollWheellZoom={false}
