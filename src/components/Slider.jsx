@@ -50,6 +50,7 @@ function Slider() {
         navigation
         slidesPerView={1}
         scrollbar={{ draggable: true }}
+        pagination={{ clickable: true }}
       >
         {listings.map(({data,id}) => (
           <SwiperSlide key={id} onClick={()=>navigate(`/category/${data.type}/${id}`)}>
@@ -65,7 +66,7 @@ function Slider() {
               >
                   <p className="swiperSlideText">{data.name}</p>
                   <p className="swiperSlidePrice">${(data.discountedPrice??data.regularPrice).toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{''}{(data.type==='rent'&&' / Month')}</p>
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{''}{(data.type==='rent'&&' / month')}</p>
               </div>
             </div>
           </SwiperSlide>
