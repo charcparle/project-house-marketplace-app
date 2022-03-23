@@ -157,9 +157,10 @@ function EditListing() {
     delete formDataCopy.images;
     delete formDataCopy.address;
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
-    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+    const docRef = doc(db, 'listings', params.listingId)
+    await updateDoc(docRef, formDataCopy)
     setLoading(false);
-    toast.success("Listing saved!");
+    toast.success("Listing updated!");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
@@ -193,7 +194,15 @@ function EditListing() {
     }
   };
 
-  // Fetch current listing details and update formData
+// Redirect if listing is not user's
+useEffect(()=>{
+  if (listing && listing.userRef!==auth.currentUser.uid){
+    toast.error('You cannot edit this listing - please double check with user')
+    navigate('/')
+  }
+})
+
+  // Fetch current listing details for editing
   useEffect(() => {
     const fetchListing = async () => {
       const docRef = doc(db, "listings", params.listingId);
@@ -212,7 +221,7 @@ function EditListing() {
     return ()=>console.log(listing)
   }, [params.listingId, navigate]);
 
-  // Check if user is logged in
+  // Set userRef to current user
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -225,9 +234,11 @@ function EditListing() {
     return unsub;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   if (loading) {
     return <Spinner />;
   }
+
   return (
     <div className="profile">
       <header>

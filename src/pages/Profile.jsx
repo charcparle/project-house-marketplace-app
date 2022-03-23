@@ -45,7 +45,6 @@ function Profile() {
           data: doc.data(),
         });
       });
-      console.log(listingsArr);
       setListings(listingsArr);
       setLoading(false);
     };
