@@ -4,7 +4,7 @@ import { ReactComponent as EditIcon } from "../assets/svg/editIcon.svg";
 import bedIcon from "../assets/svg/bedIcon.svg";
 import bathtubIcon from "../assets/svg/bathtubIcon.svg";
 
-function ListingItem({ listing, id, onDelete }) {
+function ListingItem({ listing, id, onEdit, onDelete }) {
   // console.log(listing);
   return (
     <li className="categoryListing">
@@ -31,20 +31,20 @@ function ListingItem({ listing, id, onDelete }) {
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             {listing.type === "rent" && " / Month"}
           </p>
-        <div className="categoryListingInfoDiv">
-          <img src={bedIcon} alt="Bedrooms" />
-          <p className="categoryListingInfoText">
-            {listing.bedrooms > 1
-              ? `${listing.bedrooms} bedrooms`
-              : "1 bedroom"}
-          </p>
-          <img src={bathtubIcon} alt="Bathrooms" />
-          <p className="categoryListingInfoText">
-            {listing.bathrooms > 1
-              ? `${listing.bathrooms} bathrooms`
-              : "1 bathroom"}
-          </p>
-        </div>
+          <div className="categoryListingInfoDiv">
+            <img src={bedIcon} alt="Bedrooms" />
+            <p className="categoryListingInfoText">
+              {listing.bedrooms > 1
+                ? `${listing.bedrooms} bedrooms`
+                : "1 bedroom"}
+            </p>
+            <img src={bathtubIcon} alt="Bathrooms" />
+            <p className="categoryListingInfoText">
+              {listing.bathrooms > 1
+                ? `${listing.bathrooms} bathrooms`
+                : "1 bathroom"}
+            </p>
+          </div>
         </div>
       </Link>
       {onDelete && (
@@ -54,6 +54,7 @@ function ListingItem({ listing, id, onDelete }) {
           onClick={() => onDelete(listing.id, listing.name)}
         />
       )}
+      {onEdit && <EditIcon className="editIcon" onClick={() => onEdit(id)} />}
     </li>
   );
 }
