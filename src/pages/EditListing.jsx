@@ -8,19 +8,13 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import {
-  doc,
-  updateDoc,
-  getDoc,
-  addDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 
 function EditListing() {
+  //eslint-disable-next-line
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [listing, setListing] = useState(null);
@@ -122,6 +116,8 @@ function EditListing() {
               case "running":
                 console.log("Upload is running");
                 break;
+              default:
+                break;
             }
           },
           (error) => {
@@ -157,8 +153,8 @@ function EditListing() {
     delete formDataCopy.images;
     delete formDataCopy.address;
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
-    const docRef = doc(db, 'listings', params.listingId)
-    await updateDoc(docRef, formDataCopy)
+    const docRef = doc(db, "listings", params.listingId);
+    await updateDoc(docRef, formDataCopy);
     setLoading(false);
     toast.success("Listing updated!");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
@@ -194,13 +190,15 @@ function EditListing() {
     }
   };
 
-// Redirect if listing is not user's
-useEffect(()=>{
-  if (listing && listing.userRef!==auth.currentUser.uid){
-    toast.error('You cannot edit this listing - please double check with user')
-    navigate('/')
-  }
-})
+  // Redirect if listing is not user's
+  useEffect(() => {
+    if (listing && listing.userRef !== auth.currentUser.uid) {
+      toast.error(
+        "You cannot edit this listing - please double check with user"
+      );
+      navigate("/");
+    }
+  });
 
   // Fetch current listing details for editing
   useEffect(() => {
@@ -218,7 +216,6 @@ useEffect(()=>{
       }
     };
     fetchListing();
-    return ()=>console.log(listing)
   }, [params.listingId, navigate]);
 
   // Set userRef to current user
@@ -457,9 +454,9 @@ useEffect(()=>{
           <label className="formLabel">Images</label>
           {listing && (
             <ul>
-              {listing.imgUrls.map((url,i)=>(
+              {listing.imgUrls.map((url, i) => (
                 <li key={i}>
-                  <img src={url} height="50px" />
+                  <img src={url} height="50px" alt={listing.name + ' img' + i}/>
                 </li>
               ))}
             </ul>
